@@ -1,5 +1,7 @@
 ﻿using Business.Concrete;
+using DataAccess.Concrete.EntitiyFramework;
 using DataAccess.Concrete.InMemory;
+using Entities.Concrete;
 using System;
 
 namespace ConsoleUI
@@ -8,10 +10,41 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new InMemoryCarDal());
-            foreach (var car in carManager.GetAll())
+            
+
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+
+            var rental = rentalManager.Add(new Rental
             {
-                Console.WriteLine(car.CarName);
+                CarId = 1,
+                CustomerId = 2,
+                RentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
+            });
+
+            Console.WriteLine(rental.Message);
+        }
+
+        private static void CustomerTest()
+        {
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+
+            var listCustomers = customerManager.GetAll();
+
+            foreach (var customer in listCustomers.Data)
+            {
+                Console.WriteLine(customer.CompanyName);
+            }
+        }
+
+        private static void UserTest()
+        {
+            UserManager userManager = new UserManager(new EfUserDal());
+
+            var listUsers = userManager.GetAll();
+
+            foreach (var user in listUsers.Data)
+            {
+                Console.WriteLine(user.FirstName);
             }
         }
     }
